@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambit Management Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Ambit Management Dashboard</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Navigation -->
+            <nav class="nav">
+                <button class="nav-button active" onclick="changeReport('banker-metrics')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                    Banker Metrics Dec
+                </button>
+                <button class="nav-button" onclick="changeReport('pl-ytd')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                    P&L YTD Dec
+                </button>
+            </nav>
+
+            <!-- Report Container -->
+            <div class="report-container">
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading report...</p>
+                </div>
+                <iframe
+                    id="reportFrame"
+                    title="Banker Metrics Dec V3"
+                    src="https://app.powerbi.com/reportEmbed?reportId=d3a0a005-0fed-4afc-b714-cafced880875&autoAuth=true&ctid=124db35c-eca7-419f-a8c8-45a9d6c948c0"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const reports = {
+            'banker-metrics': 'https://app.powerbi.com/reportEmbed?reportId=d3a0a005-0fed-4afc-b714-cafced880875&autoAuth=true&ctid=124db35c-eca7-419f-a8c8-45a9d6c948c0',
+            'pl-ytd': 'https://app.powerbi.com/reportEmbed?reportId=852faf61-409b-4075-9e2e-c1b1cc9d768e&autoAuth=true&ctid=124db35c-eca7-419f-a8c8-45a9d6c948c0'
+        };
+
+        function changeReport(reportKey) {
+            const loading = document.getElementById('loading');
+            const reportFrame = document.getElementById('reportFrame');
+            const buttons = document.querySelectorAll('.nav-button');
+
+            // Update active button
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.includes(reportKey === 'banker-metrics' ? 'Banker' : 'P&L')) {
+                    button.classList.add('active');
+                }
+            });
+
+            // Show loading
+            loading.style.display = 'flex';
+            reportFrame.style.opacity = '0';
+
+            // Change report
+            reportFrame.src = reports[reportKey];
+
+            // Hide loading after transition
+            setTimeout(() => {
+                loading.style.display = 'none';
+                reportFrame.style.opacity = '1';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
